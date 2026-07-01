@@ -87,17 +87,6 @@ object BuildTest : BuildType({
 
     steps {
         maven {
-            id = "Maven2"
-            executionMode = BuildStep.ExecutionMode.ALWAYS
-
-            conditions {
-                contains("teamcity.build.branch", "master")
-            }
-            goals = "clean deploy"
-            runnerArgs = "-Dmaven.test.failure.ignore=true"
-            userSettingsSelection = "settings.xml"
-        }
-        maven {
             name = "New build step"
             id = "No_master"
             executionMode = BuildStep.ExecutionMode.ALWAYS
