@@ -48,7 +48,6 @@ object Build : BuildType({
 
             conditions {
                 contains("teamcity.build.branch", "master")
-                equals("teamcity.build.branch.is_default", "true")
             }
             goals = "clean deploy"
             runnerArgs = "-Dmaven.test.failure.ignore=true"
