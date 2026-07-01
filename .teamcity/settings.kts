@@ -32,7 +32,10 @@ project {
 }
 
 object Build : BuildType({
-    name = "Build"
+    name = "Build deploy"
+
+    artifactRules = "target/*.jar => build-artifacts"
+    publishArtifacts = PublishMode.SUCCESSFUL
 
     vcs {
         root(DslContext.settingsRoot)
@@ -41,9 +44,10 @@ object Build : BuildType({
     steps {
         maven {
             id = "Maven2"
+            executionMode = BuildStep.ExecutionMode.ALWAYS
 
             conditions {
-                equals("teamcity.build.branch", "master")
+                contains("teamcity.build.branch", "master")
             }
             goals = "clean deploy"
             runnerArgs = "-Dmaven.test.failure.ignore=true"
@@ -52,9 +56,10 @@ object Build : BuildType({
         maven {
             name = "New build step"
             id = "No_master"
+            executionMode = BuildStep.ExecutionMode.ALWAYS
 
             conditions {
-                doesNotEqual("teamcity.build.branch", "master")
+                doesNotContain("teamcity.build.branch", "master")
             }
             goals = "clean test"
             runnerArgs = "-Dmaven.test.failure.ignore=true"
