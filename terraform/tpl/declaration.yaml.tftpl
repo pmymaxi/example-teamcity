@@ -1,0 +1,14 @@
+spec:
+  containers:
+    - name: ${name_container}
+      image: ${image_container}
+
+%{ if length(env) > 0 ~}
+      env:
+%{ for e in env ~}
+        - name: ${e.name}
+          value: ${e.value}
+%{ endfor ~}
+%{ endif ~}
+
+  restartPolicy: ${policy}

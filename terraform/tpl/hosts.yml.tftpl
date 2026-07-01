@@ -1,0 +1,11 @@
+---
+all:
+  hosts:
+    nexus-01:
+      ansible_host: ${ansible_host}
+  children:
+    nexus:
+      hosts:
+        nexus-01:
+  vars:
+    ansible_user: ${ansible_user}
