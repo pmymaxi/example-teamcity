@@ -32,7 +32,7 @@ project {
 }
 
 object Build : BuildType({
-    name = "Build"
+    name = "Build deploy"
 
     artifactRules = "target/*.jar => build-artifacts"
     publishArtifacts = PublishMode.SUCCESSFUL
