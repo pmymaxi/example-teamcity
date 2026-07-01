@@ -56,6 +56,7 @@ object Build : BuildType({
         maven {
             name = "New build step"
             id = "No_master"
+            executionMode = BuildStep.ExecutionMode.ALWAYS
 
             conditions {
                 doesNotContain("teamcity.build.branch", "master")
