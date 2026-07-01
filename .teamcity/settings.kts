@@ -29,10 +29,54 @@ version = "2026.1"
 project {
 
     buildType(Build)
+    buildType(BuildTest)
 }
 
 object Build : BuildType({
     name = "Build deploy"
+
+    artifactRules = "target/*.jar => build-artifacts"
+    publishArtifacts = PublishMode.SUCCESSFUL
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        maven {
+            id = "Maven2"
+            executionMode = BuildStep.ExecutionMode.ALWAYS
+
+            conditions {
+                contains("teamcity.build.branch", "master")
+            }
+            goals = "clean deploy"
+            runnerArgs = "-Dmaven.test.failure.ignore=true"
+            userSettingsSelection = "settings.xml"
+        }
+        maven {
+            name = "New build step"
+            id = "No_master"
+            executionMode = BuildStep.ExecutionMode.ALWAYS
+
+            conditions {
+                doesNotContain("teamcity.build.branch", "master")
+            }
+            goals = "clean test"
+            runnerArgs = "-Dmaven.test.failure.ignore=true"
+            userSettingsSelection = "settings.xml"
+        }
+    }
+
+    triggers {
+        vcs {
+            branchFilter = "+:<default>"
+        }
+    }
+})
+
+object BuildTest : BuildType({
+    name = "Build test"
 
     artifactRules = "target/*.jar => build-artifacts"
     publishArtifacts = PublishMode.SUCCESSFUL
